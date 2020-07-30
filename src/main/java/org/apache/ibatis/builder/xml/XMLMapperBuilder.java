@@ -81,16 +81,16 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   private XMLMapperBuilder(XPathParser parser, Configuration configuration, String resource, Map<String, XNode> sqlFragments) {
     super(configuration);
-    this.builderAssistant = new MapperBuilderAssistant(configuration, resource);
+    this.builderAssistant = new MapperBuilderAssistant(configuration, resource);//
     this.parser = parser;
-    this.sqlFragments = sqlFragments;
-    this.resource = resource;
+    this.sqlFragments = sqlFragments;// sql 片
+    this.resource = resource;// mapper配置文件路径
   }
 
   public void parse() {
-    if (!configuration.isResourceLoaded(resource)) {
-      configurationElement(parser.evalNode("/mapper"));
-      configuration.addLoadedResource(resource);
+    if (!configuration.isResourceLoaded(resource)) {//如果之前没有加载过
+      configurationElement(parser.evalNode("/mapper")); // 进行解析
+      configuration.addLoadedResource(resource);  // 将resource 记录在LoadedResource 里面表示已经加载过了
       bindMapperForNamespace();
     }
 
@@ -102,32 +102,32 @@ public class XMLMapperBuilder extends BaseBuilder {
   public XNode getSqlFragment(String refid) {
     return sqlFragments.get(refid);
   }
-
+  /// 解析mapper
   private void configurationElement(XNode context) {
     try {
-      String namespace = context.getStringAttribute("namespace");
-      if (namespace.equals("")) {
+      String namespace = context.getStringAttribute("namespace");// 获取namespace
+      if (namespace.equals("")) {// namespace不能空
     	  throw new BuilderException("Mapper's namespace cannot be empty");
       }
-      builderAssistant.setCurrentNamespace(namespace);
+      builderAssistant.setCurrentNamespace(namespace);// 将namespace的值放入assistant 中
       cacheRefElement(context.evalNode("cache-ref"));
       cacheElement(context.evalNode("cache"));
-      parameterMapElement(context.evalNodes("/mapper/parameterMap"));
-      resultMapElements(context.evalNodes("/mapper/resultMap"));
-      sqlElement(context.evalNodes("/mapper/sql"));
-      buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
+      parameterMapElement(context.evalNodes("/mapper/parameterMap")); ///parameterMap
+      resultMapElements(context.evalNodes("/mapper/resultMap"));/// resultMap
+      sqlElement(context.evalNodes("/mapper/sql"));// sql
+      buildStatementFromContext(context.evalNodes("select|insert|update|delete"));// select|insert|update|delete 标签
     } catch (Exception e) {
       throw new BuilderException("Error parsing Mapper XML. Cause: " + e, e);
     }
   }
-
+  // buildStatement
   private void buildStatementFromContext(List<XNode> list) {
     if (configuration.getDatabaseId() != null) {
       buildStatementFromContext(list, configuration.getDatabaseId());
     }
     buildStatementFromContext(list, null);
   }
-
+  // 遍历  解析 select|insert|update|delete 标签
   private void buildStatementFromContext(List<XNode> list, String requiredDatabaseId) {
     for (XNode context : list) {
       final XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, builderAssistant, context, requiredDatabaseId);
@@ -388,20 +388,20 @@ public class XMLMapperBuilder extends BaseBuilder {
   }
 
   private void bindMapperForNamespace() {
-    String namespace = builderAssistant.getCurrentNamespace();
+    String namespace = builderAssistant.getCurrentNamespace();// 获取当前mapper文件的namespace
     if (namespace != null) {
       Class<?> boundType = null;
-      try {
+      try {// 获取 namespace 的绑定类型，如果我们这个namespace是一个实体的话
         boundType = Resources.classForName(namespace);
       } catch (ClassNotFoundException e) {
         //ignore, bound type is not required
       }
       if (boundType != null) {
-        if (!configuration.hasMapper(boundType)) {
+        if (!configuration.hasMapper(boundType)) {// 如果没有
           // Spring may not know the real resource name so we set a flag
           // to prevent loading again this resource from the mapper interface
           // look at MapperAnnotationBuilder#loadXmlResource
-          configuration.addLoadedResource("namespace:" + namespace);
+          configuration.addLoadedResource("namespace:" + namespace);// 添加到已经加载的资源中
           configuration.addMapper(boundType);
         }
       }

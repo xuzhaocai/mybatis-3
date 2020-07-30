@@ -121,6 +121,7 @@ public class XPathParser {
   }
 
   public XPathParser(InputStream inputStream, boolean validation, Properties variables, EntityResolver entityResolver) {
+    //  entityResolver  =     XMLMapperEntityResolver
     commonConstructor(validation, variables, entityResolver);
     this.document = createDocument(new InputSource(inputStream));
   }
@@ -224,12 +225,12 @@ public class XPathParser {
       throw new BuilderException("Error evaluating XPath.  Cause: " + e, e);
     }
   }
-
+  // 根据流信息   创建 Document
   private Document createDocument(InputSource inputSource) {
     // important: this must only be called AFTER common constructor
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      factory.setValidating(validation);
+      factory.setValidating(validation);// 是否验证
 
       factory.setNamespaceAware(false);
       factory.setIgnoringComments(true);
@@ -239,7 +240,9 @@ public class XPathParser {
 
       DocumentBuilder builder = factory.newDocumentBuilder();
       builder.setEntityResolver(entityResolver);
-      builder.setErrorHandler(new ErrorHandler() {
+
+      //设置错误处理器
+      builder.setErrorHandler(new ErrorHandler(){
         public void error(SAXParseException exception) throws SAXException {
           throw exception;
         }
@@ -258,9 +261,9 @@ public class XPathParser {
   }
 
   private void commonConstructor(boolean validation, Properties variables, EntityResolver entityResolver) {
-    this.validation = validation;
-    this.entityResolver = entityResolver;
-    this.variables = variables;
+    this.validation = validation;// 是否验证
+    this.entityResolver = entityResolver; // Resolver
+    this.variables = variables;// prop
     XPathFactory factory = XPathFactory.newInstance();
     this.xpath = factory.newXPath();
   }

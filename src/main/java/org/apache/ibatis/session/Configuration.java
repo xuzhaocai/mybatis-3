@@ -116,7 +116,7 @@ public class Configuration {
   protected Properties variables = new Properties();
   protected ObjectFactory objectFactory = new DefaultObjectFactory();
   protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
-  protected MapperRegistry mapperRegistry = new MapperRegistry(this);
+  protected MapperRegistry mapperRegistry = new MapperRegistry(this);// 绑定着mapper
 
   protected boolean lazyLoadingEnabled = false;
   protected ProxyFactory proxyFactory;
@@ -140,9 +140,9 @@ public class Configuration {
   protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<ParameterMap>("Parameter Maps collection");
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<KeyGenerator>("Key Generators collection");
-
+  // 缓存着已经加载的mapper   格式是 "namespace:"+具体的namespace ，所以我们在写mapper的时候namespace不能重复
   protected final Set<String> loadedResources = new HashSet<String>();
-  protected final Map<String, XNode> sqlFragments = new StrictMap<XNode>("XML fragments parsed from previous mappers");
+  protected final Map<String, XNode> sqlFragments = new StrictMap<XNode>("XML fragments parsed from previous mappers");//sql片
 
   protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<XMLStatementBuilder>();
   protected final Collection<CacheRefResolver> incompleteCacheRefs = new LinkedList<CacheRefResolver>();
@@ -584,7 +584,7 @@ public class Configuration {
   }
 
   public void addMappedStatement(MappedStatement ms) {
-    mappedStatements.put(ms.getId(), ms);
+    mappedStatements.put(ms.getId(), ms);// 将MappedStatement 按照 key 是id 然后value是MappedStatement对象缓存到map中
   }
 
   public Collection<String> getMappedStatementNames() {

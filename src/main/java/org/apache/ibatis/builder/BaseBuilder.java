@@ -36,7 +36,7 @@ public abstract class BaseBuilder {
   protected final TypeHandlerRegistry typeHandlerRegistry;
 
   public BaseBuilder(Configuration configuration) {
-    this.configuration = configuration;
+    this.configuration = configuration;// 设置configuration
     this.typeAliasRegistry = this.configuration.getTypeAliasRegistry();
     this.typeHandlerRegistry = this.configuration.getTypeHandlerRegistry();
   }
@@ -94,7 +94,7 @@ public abstract class BaseBuilder {
       throw new BuilderException("Error creating instance. Cause: " + e, e);
     }
   }
-
+  // 将别名转成对应的class 对象
   protected Class<?> resolveClass(String alias) {
     if (alias == null) return null;
     try {
@@ -126,7 +126,7 @@ public abstract class BaseBuilder {
     return handler;
   }
 
-  protected Class<?> resolveAlias(String alias) {
+  protected Class<?> resolveAlias(String alias) {// 找别名处理类 将别名转成对应的class对象
     return typeAliasRegistry.resolveAlias(alias);
   }
 }

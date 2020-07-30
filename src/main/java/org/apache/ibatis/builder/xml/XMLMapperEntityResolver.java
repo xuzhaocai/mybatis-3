@@ -81,7 +81,7 @@ public class XMLMapperEntityResolver implements EntityResolver {
     InputSource source = null;
     try {
       String path = doctypeMap.get(publicId);
-      source = getInputSource(path, source);
+      source = getInputSource(path, source);// 创建 inputSource
       if (source == null) {
         path = doctypeMap.get(systemId);
         source = getInputSource(path, source);

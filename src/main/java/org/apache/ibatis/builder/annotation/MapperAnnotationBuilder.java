@@ -92,20 +92,20 @@ public class MapperAnnotationBuilder {
   private final Set<Class<? extends Annotation>> sqlProviderAnnotationTypes = new HashSet<Class<? extends Annotation>>();
 
   private Configuration configuration;
-  private MapperBuilderAssistant assistant;
-  private Class<?> type;
+  private MapperBuilderAssistant assistant;// mapper 构建助手
+  private Class<?> type;// mapper 接口类型
 
   public MapperAnnotationBuilder(Configuration configuration, Class<?> type) {
-    String resource = type.getName().replace('.', '/') + ".java (best guess)";
+    String resource = type.getName().replace('.', '/') + ".java (best guess)";// 将全类名中的. 替换成/ 然后后面加上个.java(best guess)
     this.assistant = new MapperBuilderAssistant(configuration, resource);
     this.configuration = configuration;
     this.type = type;
-
+    // 添加一堆 注解 @Select   @Insert @Update  @Delete
     sqlAnnotationTypes.add(Select.class);
     sqlAnnotationTypes.add(Insert.class);
     sqlAnnotationTypes.add(Update.class);
     sqlAnnotationTypes.add(Delete.class);
-
+    // TODO 添加一堆Provider
     sqlProviderAnnotationTypes.add(SelectProvider.class);
     sqlProviderAnnotationTypes.add(InsertProvider.class);
     sqlProviderAnnotationTypes.add(UpdateProvider.class);
@@ -113,14 +113,14 @@ public class MapperAnnotationBuilder {
   }
 
   public void parse() {
-    String resource = type.toString();
-    if (!configuration.isResourceLoaded(resource)) {
-      loadXmlResource();
-      configuration.addLoadedResource(resource);
-      assistant.setCurrentNamespace(type.getName());
+    String resource = type.toString();//interface com.xuzhaocai.dubbo.mybatis.example.UserMapper
+    if (!configuration.isResourceLoaded(resource)) {// 如果没有加载这个资源
+      loadXmlResource();// 加载对应的 xml  mapper   这个mapper 的namespace就是接口的全类名
+      configuration.addLoadedResource(resource);// 添加到已经加载里面
+      assistant.setCurrentNamespace(type.getName());//就是设置当前的Namespace
       parseCache();
       parseCacheRef();
-      Method[] methods = type.getMethods();
+      Method[] methods = type.getMethods();// 获取所有method
       for (Method method : methods) {
         try {
           if (!method.isBridge()) { // issue #237
@@ -167,14 +167,14 @@ public class MapperAnnotationBuilder {
       }
     }
   }
-
-  private void parseCache() {
+  // 解析@CacheNamespace注解
+  private void parseCache() {// 获取@CacheNamespace注解
     CacheNamespace cacheDomain = type.getAnnotation(CacheNamespace.class);
     if (cacheDomain != null) {
       assistant.useNewCache(cacheDomain.implementation(), cacheDomain.eviction(), cacheDomain.flushInterval(), cacheDomain.size(), cacheDomain.readWrite(), null);
     }
   }
-
+  // 解析@CacheNamespaceRef 注解
   private void parseCacheRef() {
     CacheNamespaceRef cacheDomainRef = type.getAnnotation(CacheNamespaceRef.class);
     if (cacheDomainRef != null) {

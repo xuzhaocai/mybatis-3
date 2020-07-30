@@ -31,7 +31,7 @@ import java.util.Set;
  * @author Eduardo Macarron
  * @author Lasse Voss
  */
-public class MapperRegistry {
+public class MapperRegistry {// mapper文件与mapper class 绑定的
 
   private Configuration config;
   private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<Class<?>, MapperProxyFactory<?>>();
@@ -55,23 +55,23 @@ public class MapperRegistry {
   public <T> boolean hasMapper(Class<T> type) {
     return knownMappers.containsKey(type);
   }
-
+  // 添加mapper
   public <T> void addMapper(Class<T> type) {
-    if (type.isInterface()) {
-      if (hasMapper(type)) {
+    if (type.isInterface()) {//判断是否是接口
+      if (hasMapper(type)) {// 判断混存中是否存在
         throw new BindingException("Type " + type + " is already known to the MapperRegistry.");
       }
-      boolean loadCompleted = false;
+      boolean loadCompleted = false;// 设置加载完成标识 为false
       try {
         knownMappers.put(type, new MapperProxyFactory<T>(type));
         // It's important that the type is added before the parser is run
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
-        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
-        parser.parse();
-        loadCompleted = true;
+        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);// 注解解析
+        parser.parse();// 进行解析
+        loadCompleted = true; // 加载完成标识为true
       } finally {
-        if (!loadCompleted) {
+        if (!loadCompleted) {// 如果没有加载完成 ，就移除 这个type
           knownMappers.remove(type);
         }
       }

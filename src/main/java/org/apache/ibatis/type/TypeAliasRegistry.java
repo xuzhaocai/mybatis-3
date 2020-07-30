@@ -36,7 +36,7 @@ import org.apache.ibatis.io.Resources;
  * @author Clinton Begin
  */
 public class TypeAliasRegistry {
-
+  // 缓存别名的
   private final Map<String, Class<?>> TYPE_ALIASES = new HashMap<String, Class<?>>();
 
   public TypeAliasRegistry() {
@@ -101,15 +101,15 @@ public class TypeAliasRegistry {
   }
 
   @SuppressWarnings("unchecked")
-  // throws class cast exception as well if types cannot be assigned
+  // throws class cast exception as well if types cannot be assigned   通过别名获取 对应的真实类型class
   public <T> Class<T> resolveAlias(String string) {
     try {
       if (string == null) return null;
-      String key = string.toLowerCase(Locale.ENGLISH); // issue #748
+      String key = string.toLowerCase(Locale.ENGLISH); // issue #748  这个就是别名，或者全类名
       Class<T> value;
-      if (TYPE_ALIASES.containsKey(key)) {
-        value = (Class<T>) TYPE_ALIASES.get(key);
-      } else {
+      if (TYPE_ALIASES.containsKey(key)) { // 从别名缓存中判断是否存在这个别名
+        value = (Class<T>) TYPE_ALIASES.get(key);// 存在就直接取出来
+      } else {// 不存在就使用classforname的形式
         value = (Class<T>) Resources.classForName(string);
       }
       return value;

@@ -68,7 +68,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
   public String getCurrentNamespace() {
     return currentNamespace;
   }
-
+  // currentNamespace ： 接口全类名
   public void setCurrentNamespace(String currentNamespace) {
     if (currentNamespace == null) {
       throw new BuilderException("The mapper element requires a namespace attribute to be specified.");
@@ -264,9 +264,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     
     if (unresolvedCacheRef) throw new IncompleteElementException("Cache-ref not yet resolved");
     
-    id = applyCurrentNamespace(id, false);
-    boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
-
+    id = applyCurrentNamespace(id, false);// 生成一个id ， namespace+"."+id
+    boolean isSelect = sqlCommandType == SqlCommandType.SELECT;// 是否是select
+    // 创建MappedStatement
     MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType);
     statementBuilder.resource(resource);
     statementBuilder.fetchSize(fetchSize);
@@ -283,9 +283,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     setStatementParameterMap(parameterMap, parameterType, statementBuilder);
     setStatementResultMap(resultMap, resultType, resultSetType, statementBuilder);
     setStatementCache(isSelect, flushCache, useCache, currentCache, statementBuilder);
-
+    // 构建statement
     MappedStatement statement = statementBuilder.build();
-    configuration.addMappedStatement(statement);
+    configuration.addMappedStatement(statement); //添加到configuration 中
     return statement;
   }
 
@@ -305,7 +305,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     statementBuilder.useCache(useCache);
     statementBuilder.cache(cache);
   }
-
+  // 处理parameterMap
   private void setStatementParameterMap(
       String parameterMap,
       Class<?> parameterTypeClass,
@@ -328,7 +328,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       statementBuilder.parameterMap(inlineParameterMapBuilder.build());
     }
   }
-
+  // 处理resultMap
   private void setStatementResultMap(
       String resultMap,
       Class<?> resultType,
@@ -359,9 +359,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
 
     statementBuilder.resultSetType(resultSetType);
   }
-
+  // 往MappedStatement 中设置timeout
   private void setStatementTimeout(Integer timeout, MappedStatement.Builder statementBuilder) {
-    if (timeout == null) {
+    if (timeout == null) {// 如果用户没有设置 就使用系统的默认的timeout
       timeout = configuration.getDefaultStatementTimeout();
     }
     statementBuilder.timeout(timeout);

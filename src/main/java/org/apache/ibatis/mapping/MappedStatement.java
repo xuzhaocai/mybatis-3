@@ -68,13 +68,13 @@ public final class MappedStatement {
       mappedStatement.configuration = configuration;
       mappedStatement.id = id;
       mappedStatement.sqlSource = sqlSource;
-      mappedStatement.statementType = StatementType.PREPARED;
+      mappedStatement.statementType = StatementType.PREPARED;//prepared
       mappedStatement.parameterMap = new ParameterMap.Builder(configuration, "defaultParameterMap", null, new ArrayList<ParameterMapping>()).build();
       mappedStatement.resultMaps = new ArrayList<ResultMap>();
-      mappedStatement.timeout = configuration.getDefaultStatementTimeout();
-      mappedStatement.sqlCommandType = sqlCommandType;
+      mappedStatement.timeout = configuration.getDefaultStatementTimeout();// 使用默认的timeout
+      mappedStatement.sqlCommandType = sqlCommandType;// 类型 ： select，insert，update，
       mappedStatement.keyGenerator = configuration.isUseGeneratedKeys() && SqlCommandType.INSERT.equals(sqlCommandType) ? new Jdbc3KeyGenerator() : new NoKeyGenerator();
-      String logId = id;
+      String logId = id;// logId
       if (configuration.getLogPrefix() != null) logId = configuration.getLogPrefix() + id;
       mappedStatement.statementLog = LogFactory.getLog(logId);
       mappedStatement.lang = configuration.getDefaultScriptingLanuageInstance();

@@ -139,7 +139,7 @@
       <groupId>ognl</groupId>
       <artifactId>ognl</artifactId>
       <version>2.6.9</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -250,7 +250,7 @@
           <arguments>-Prelease</arguments>
         </configuration>
       </plugin>
-      <plugin>
+      <!--<plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>jarjar-maven-plugin</artifactId>
         <executions>
@@ -278,7 +278,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>

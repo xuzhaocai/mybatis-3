@@ -35,9 +35,9 @@ public class XMLIncludeTransformer {
     this.configuration = configuration;
     this.builderAssistant = builderAssistant;
   }
-
+  // 递归查找 inclode
   public void applyIncludes(Node source) {
-    if (source.getNodeName().equals("include")) {
+    if (source.getNodeName().equals("include")) {// 如果是include
       Node toInclude = findSqlFragment(getStringAttribute(source, "refid"));
       applyIncludes(toInclude);
       if (toInclude.getOwnerDocument() != source.getOwnerDocument()) {
@@ -48,7 +48,7 @@ public class XMLIncludeTransformer {
         toInclude.getParentNode().insertBefore(toInclude.getFirstChild(), toInclude);
       }
       toInclude.getParentNode().removeChild(toInclude);
-    } else if (source.getNodeType() == Node.ELEMENT_NODE) {
+    } else if (source.getNodeType() == Node.ELEMENT_NODE) {// 判断这个node是否是个元素
       NodeList children = source.getChildNodes();
       for (int i=0; i<children.getLength(); i++) {
         applyIncludes(children.item(i));

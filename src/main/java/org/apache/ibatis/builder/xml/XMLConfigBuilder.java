@@ -71,7 +71,14 @@ public class XMLConfigBuilder extends BaseBuilder {
     this(inputStream, environment, null);
   }
 
+  /**
+   * 构造
+   * @param inputStream  配置文件输入流
+   * @param environment environment
+   * @param props   props
+   */
   public XMLConfigBuilder(InputStream inputStream, String environment, Properties props) {
+    //new XPathParser(inputStream, true, props, new XMLMapperEntityResolver())
     this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
@@ -79,20 +86,24 @@ public class XMLConfigBuilder extends BaseBuilder {
     super(new Configuration());
     ErrorContext.instance().resource("SQL Mapper Configuration");
     this.configuration.setVariables(props);
-    this.parsed = false;
+    this.parsed = false;// 没有被解析过
     this.environment = environment;
-    this.parser = parser;
+    this.parser = parser;  // parser
   }
 
   public Configuration parse() {
-    if (parsed) {
+    if (parsed) {// 判断是否已经解析
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
     }
-    parsed = true;
+    parsed = true;// 设置解析标识
     parseConfiguration(parser.evalNode("/configuration"));
     return configuration;
   }
 
+  /**
+   * 进行解析 根node 是  configuration
+   * @param root
+   */
   private void parseConfiguration(XNode root) {
     try {
       propertiesElement(root.evalNode("properties")); //issue #117 read properties first
@@ -305,7 +316,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       }
     }
   }
-
+  // 解析mapper 标签
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -313,23 +324,23 @@ public class XMLConfigBuilder extends BaseBuilder {
           String mapperPackage = child.getStringAttribute("name");
           configuration.addMappers(mapperPackage);
         } else {
-          String resource = child.getStringAttribute("resource");
-          String url = child.getStringAttribute("url");
-          String mapperClass = child.getStringAttribute("class");
-          if (resource != null && url == null && mapperClass == null) {
+          String resource = child.getStringAttribute("resource");// resource
+          String url = child.getStringAttribute("url"); // url
+          String mapperClass = child.getStringAttribute("class");/// class
+          if (resource != null && url == null && mapperClass == null) {// resource
             ErrorContext.instance().resource(resource);
             InputStream inputStream = Resources.getResourceAsStream(resource);
             XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperParser.parse();
-          } else if (resource == null && url != null && mapperClass == null) {
+          } else if (resource == null && url != null && mapperClass == null) {// url
             ErrorContext.instance().resource(url);
             InputStream inputStream = Resources.getUrlAsStream(url);
-            XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url, configuration.getSqlFragments());
+            XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url, configuration.getSqlFragments());// 一个mapper对应一个parser
             mapperParser.parse();
-          } else if (resource == null && url == null && mapperClass != null) {
+          } else if (resource == null && url == null && mapperClass != null) {// mapperClass
             Class<?> mapperInterface = Resources.classForName(mapperClass);
             configuration.addMapper(mapperInterface);
-          } else {
+          } else {// 他不知道解析谁
             throw new BuilderException("A mapper element may only specify a url, resource or class, but not more than one.");
           }
         }
