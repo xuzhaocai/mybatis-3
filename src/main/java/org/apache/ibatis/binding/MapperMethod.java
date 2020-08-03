@@ -178,8 +178,8 @@ public class MapperMethod {
     private final SqlCommandType type;
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) throws BindingException {
-      String statementName = mapperInterface.getName() + "." + method.getName();
-      MappedStatement ms = null;
+      String statementName = mapperInterface.getName() + "." + method.getName();//拼接statementName
+      MappedStatement ms = null;// statement
       if (configuration.hasStatement(statementName)) {
         ms = configuration.getMappedStatement(statementName);
       } else if (!mapperInterface.equals(method.getDeclaringClass().getName())) { // issue #35
@@ -196,9 +196,9 @@ public class MapperMethod {
           throw new BindingException("Invalid bound statement (not found): " + statementName);
         }
       } else {
-        name = ms.getId();
-        type = ms.getSqlCommandType();
-        if (type == SqlCommandType.UNKNOWN) {
+        name = ms.getId();///  全类名.方法名
+        type = ms.getSqlCommandType();// sql type  select| update| delete| insert
+        if (type == SqlCommandType.UNKNOWN) {// 类型不知道的话
           throw new BindingException("Unknown execution method for: " + name);
         }
       }
@@ -215,10 +215,10 @@ public class MapperMethod {
 
   public static class MethodSignature {
 
-    private final boolean returnsMany;
+    private final boolean returnsMany;// 返回值是不是多个的
     private final boolean returnsMap;
-    private final boolean returnsVoid;
-    private final Class<?> returnType;
+    private final boolean returnsVoid;// 是否是return void
+    private final Class<?> returnType;// 返回值类型
     private final String mapKey;
     private final Integer resultHandlerIndex;
     private final Integer rowBoundsIndex;
@@ -229,11 +229,11 @@ public class MapperMethod {
       this.returnType = method.getReturnType();
       this.returnsVoid = void.class.equals(this.returnType);
       this.returnsMany = (configuration.getObjectFactory().isCollection(this.returnType) || this.returnType.isArray());
-      this.mapKey = getMapKey(method);
-      this.returnsMap = (this.mapKey != null);
-      this.hasNamedParameters = hasNamedParams(method);
-      this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
-      this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);
+      this.mapKey = getMapKey(method);// 从@MapKey 注解上获取值
+      this.returnsMap = (this.mapKey != null);// 是否返回map
+      this.hasNamedParameters = hasNamedParams(method);// 判断是否有@Param
+      this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);// 是否有RowBounds
+      this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);// 是否有ResultHandler
       this.params = Collections.unmodifiableSortedMap(getParams(method, this.hasNamedParameters));
     }
 

@@ -39,9 +39,9 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     this.mapperInterface = mapperInterface;// mapper class
     this.methodCache = methodCache;// 方法cache
   }
-
+  // 执行
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if (Object.class.equals(method.getDeclaringClass())) {
+    if (Object.class.equals(method.getDeclaringClass())) {// 判断是不是Object的方法
       try {
         return method.invoke(this, args);
       } catch (Throwable t) {
