@@ -61,7 +61,7 @@ public abstract class BaseExecutor implements Executor {
   private boolean closed;
 
   protected BaseExecutor(Configuration configuration, Transaction transaction) {
-    this.transaction = transaction;
+    this.transaction = transaction;// 设置tx
     this.deferredLoads = new ConcurrentLinkedQueue<DeferredLoad>();
     this.localCache = new PerpetualCache("LocalCache");
     this.localOutputParameterCache = new PerpetualCache("LocalOutputParameterCache");
@@ -283,7 +283,7 @@ public abstract class BaseExecutor implements Executor {
       return connection;
     }
   }
-  
+  // 设置wrapper
   public void setExecutorWrapper(Executor wrapper) {
     this.wrapper = wrapper;
   }

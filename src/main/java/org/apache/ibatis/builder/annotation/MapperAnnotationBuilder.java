@@ -111,7 +111,7 @@ public class MapperAnnotationBuilder {
     sqlProviderAnnotationTypes.add(UpdateProvider.class);
     sqlProviderAnnotationTypes.add(DeleteProvider.class);
   }
-
+  // 进行解析
   public void parse() {
     String resource = type.toString();//interface com.xuzhaocai.dubbo.mybatis.example.UserMapper
     if (!configuration.isResourceLoaded(resource)) {// 如果没有加载这个资源
@@ -148,7 +148,7 @@ public class MapperAnnotationBuilder {
       }
     }
   }
-
+  // 加载对应的Resource
   private void loadXmlResource() {
     // Spring may not know the real resource name so we check a flag
     // to prevent loading again a resource twice
@@ -242,12 +242,12 @@ public class MapperAnnotationBuilder {
     }
     return null;
   }
-
+  // 解析成statement
   void parseStatement(Method method) {
-    Class<?> parameterTypeClass = getParameterType(method);
+    Class<?> parameterTypeClass = getParameterType(method);//获取方法的参数类型
     LanguageDriver languageDriver = getLanguageDriver(method);
-    SqlSource sqlSource = getSqlSourceFromAnnotations(method, parameterTypeClass, languageDriver);
-    if (sqlSource != null) {
+    SqlSource sqlSource = getSqlSourceFromAnnotations(method, parameterTypeClass, languageDriver);// 这个就是根据method的上面的注解生成sqlSource
+    if (sqlSource != null) {// 处理这个sqlSource
       Options options = method.getAnnotation(Options.class);
       final String mappedStatementId = type.getName() + "." + method.getName();
       Integer fetchSize = null;

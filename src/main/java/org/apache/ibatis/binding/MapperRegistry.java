@@ -39,7 +39,7 @@ public class MapperRegistry {// mapper文件与mapper class 绑定的
   public MapperRegistry(Configuration config) {
     this.config = config;
   }
-
+  //获取mapper
   @SuppressWarnings("unchecked")
   public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
     final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
@@ -67,7 +67,7 @@ public class MapperRegistry {// mapper文件与mapper class 绑定的
         // It's important that the type is added before the parser is run
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
-        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);// 注解解析
+        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);// 注解解析builder
         parser.parse();// 进行解析
         loadCompleted = true; // 加载完成标识为true
       } finally {

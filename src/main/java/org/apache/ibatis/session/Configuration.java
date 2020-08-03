@@ -101,7 +101,7 @@ public class Configuration {
   protected boolean multipleResultSetsEnabled = true;
   protected boolean useGeneratedKeys = false;
   protected boolean useColumnLabel = true;
-  protected boolean cacheEnabled = true;
+  protected boolean cacheEnabled = true;// cache
   protected boolean callSettersOnNulls = false;
   protected String logPrefix;
   protected Class <? extends Log> logImpl;
@@ -129,7 +129,7 @@ public class Configuration {
    * @see <a href='https://code.google.com/p/mybatis/issues/detail?id=300'>Issue 300</a> (google code)
    */
   protected Class<?> configurationFactory;
-
+  // interceptorChain
   protected final InterceptorChain interceptorChain = new InterceptorChain();
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
@@ -491,12 +491,12 @@ public class Configuration {
       executor = new BatchExecutor(this, transaction);
     } else if (ExecutorType.REUSE == executorType) {
       executor = new ReuseExecutor(this, transaction);
-    } else {
+    } else {// 创建simple executor
       executor = new SimpleExecutor(this, transaction);
     }
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
-    }
+    }// pluginAll   这个是拦截器
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }
@@ -659,7 +659,7 @@ public class Configuration {
   public <T> void addMapper(Class<T> type) {
     mapperRegistry.addMapper(type);
   }
-
+  /// 获取mapper
   public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
     return mapperRegistry.getMapper(type, sqlSession);
   }

@@ -91,7 +91,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (!configuration.isResourceLoaded(resource)) {//如果之前没有加载过
       configurationElement(parser.evalNode("/mapper")); // 进行解析
       configuration.addLoadedResource(resource);  // 将resource 记录在LoadedResource 里面表示已经加载过了
-      bindMapperForNamespace();
+      bindMapperForNamespace();// 这个就是根据Namespace找对应的接口生成mapper
     }
 
     parsePendingResultMaps();

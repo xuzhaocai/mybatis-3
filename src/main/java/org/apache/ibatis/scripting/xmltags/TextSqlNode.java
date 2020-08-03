@@ -28,10 +28,10 @@ public class TextSqlNode implements SqlNode {
   public TextSqlNode(String text) {
     this.text = text;
   }
-  
+  // 判断是否是动态
   public boolean isDynamic() {
-    DynamicCheckerTokenParser checker = new DynamicCheckerTokenParser();
-    GenericTokenParser parser = createParser(checker);
+    DynamicCheckerTokenParser checker = new DynamicCheckerTokenParser();// 动态检查parser
+    GenericTokenParser parser = createParser(checker);// 创建parser
     parser.parse(text);
     return checker.isDynamic();
   }
@@ -42,7 +42,7 @@ public class TextSqlNode implements SqlNode {
     return true;
   }
   
-  private GenericTokenParser createParser(TokenHandler handler) {
+  private GenericTokenParser createParser(TokenHandler handler) {// 主要是解析 ${}
     return new GenericTokenParser("${", "}", handler);
   }
 

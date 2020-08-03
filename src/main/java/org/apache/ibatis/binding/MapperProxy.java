@@ -35,9 +35,9 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
   private final Map<Method, MapperMethod> methodCache;
 
   public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
-    this.sqlSession = sqlSession;
-    this.mapperInterface = mapperInterface;
-    this.methodCache = methodCache;
+    this.sqlSession = sqlSession;// sqlSession
+    this.mapperInterface = mapperInterface;// mapper class
+    this.methodCache = methodCache;// 方法cache
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -51,10 +51,10 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     final MapperMethod mapperMethod = cachedMapperMethod(method);
     return mapperMethod.execute(sqlSession, args);
   }
-
+  // 从缓存中获取mapper method
   private MapperMethod cachedMapperMethod(Method method) {
     MapperMethod mapperMethod = methodCache.get(method);
-    if (mapperMethod == null) {
+    if (mapperMethod == null) {// 如果缓存中没有
       mapperMethod = new MapperMethod(mapperInterface, method, sqlSession.getConfiguration());
       methodCache.put(method, mapperMethod);
     }

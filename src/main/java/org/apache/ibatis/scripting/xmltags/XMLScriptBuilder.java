@@ -43,35 +43,35 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public XMLScriptBuilder(Configuration configuration, XNode context, Class<?> parameterType) {
-    super(configuration);
+    super(configuration);//
     this.context = context;
     this.parameterType = parameterType;
   }
 
   public SqlSource parseScriptNode() {
-    List<SqlNode> contents = parseDynamicTags(context);
+    List<SqlNode> contents = parseDynamicTags(context);// 解析出来所有的content
     MixedSqlNode rootSqlNode = new MixedSqlNode(contents);
     SqlSource sqlSource = null;
-    if (isDynamic) {
+    if (isDynamic) {// 动态
       sqlSource = new DynamicSqlSource(configuration, rootSqlNode);
-    } else {
+    } else {// 静态
       sqlSource = new RawSqlSource(configuration, rootSqlNode, parameterType);
     }
     return sqlSource;
   }
-
+  // 解析动态标签
   private List<SqlNode> parseDynamicTags(XNode node) {
     List<SqlNode> contents = new ArrayList<SqlNode>();
     NodeList children = node.getNode().getChildNodes();
     for (int i = 0; i < children.getLength(); i++) {
       XNode child = node.newXNode(children.item(i));
       if (child.getNode().getNodeType() == Node.CDATA_SECTION_NODE || child.getNode().getNodeType() == Node.TEXT_NODE) {
-        String data = child.getStringBody("");
+        String data = child.getStringBody("");// 获取body 内容
         TextSqlNode textSqlNode = new TextSqlNode(data);
         if (textSqlNode.isDynamic()) {
           contents.add(textSqlNode);
-          isDynamic = true;
-        } else {
+          isDynamic = true;// 设置是动态
+        } else {// 添加静态sql node 中
           contents.add(new StaticTextSqlNode(data));
         }
       } else if (child.getNode().getNodeType() == Node.ELEMENT_NODE) { // issue #628
@@ -86,7 +86,7 @@ public class XMLScriptBuilder extends BaseBuilder {
     }
     return contents;
   }
-
+  // 标签 handler
   private Map<String, NodeHandler> nodeHandlers = new HashMap<String, NodeHandler>() {
     private static final long serialVersionUID = 7123056019193266281L;
 

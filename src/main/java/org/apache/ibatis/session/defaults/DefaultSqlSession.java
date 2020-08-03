@@ -40,10 +40,10 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class DefaultSqlSession implements SqlSession {
 
-  private Configuration configuration;
-  private Executor executor;
+  private Configuration configuration;// conf
+  private Executor executor;// exec
 
-  private boolean autoCommit;
+  private boolean autoCommit;// 是否自动提交
   private boolean dirty;
   
   public DefaultSqlSession(Configuration configuration, Executor executor, boolean autoCommit) {
@@ -217,7 +217,7 @@ public class DefaultSqlSession implements SqlSession {
   public Configuration getConfiguration() {
     return configuration;
   }
-
+  // 获取mapper
   public <T> T getMapper(Class<T> type) {
     return configuration.<T>getMapper(type, this);
   }

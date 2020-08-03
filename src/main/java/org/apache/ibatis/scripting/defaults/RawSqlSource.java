@@ -28,24 +28,24 @@ import org.apache.ibatis.session.Configuration;
 /**
  * Static SqlSource. It is faster than {@link DynamicSqlSource} because mappings are 
  * calculated during startup.
- * 
+ * 静态sql
  * @since 3.2.0
  * @author Eduardo Macarron
  */
 public class RawSqlSource implements SqlSource {
 
   private final SqlSource sqlSource;
-
+  // getSql   将rootSqlNode 里面的sqlNodes 拼接成sql
   public RawSqlSource(Configuration configuration, SqlNode rootSqlNode, Class<?> parameterType) {
     this(configuration, getSql(configuration, rootSqlNode), parameterType);
   }
 
   public RawSqlSource(Configuration configuration, String sql, Class<?> parameterType) {
     SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
-    Class<?> clazz = parameterType == null ? Object.class : parameterType;
+    Class<?> clazz = parameterType == null ? Object.class : parameterType;//
     sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<String, Object>());
   }
-
+  // 获取sql  遍历组合
   private static String getSql(Configuration configuration, SqlNode rootSqlNode) {
     DynamicContext context = new DynamicContext(configuration, null);
     rootSqlNode.apply(context);

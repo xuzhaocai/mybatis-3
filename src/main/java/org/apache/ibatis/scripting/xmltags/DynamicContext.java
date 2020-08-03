@@ -38,16 +38,16 @@ public class DynamicContext {
   }
 
   private final ContextMap bindings;
-  private final StringBuilder sqlBuilder = new StringBuilder();
+  private final StringBuilder sqlBuilder = new StringBuilder();// 拼接sql的
   private int uniqueNumber = 0;
 
-  public DynamicContext(Configuration configuration, Object parameterObject) {
+  public DynamicContext(Configuration configuration, Object parameterObject) {// 创建bindings
     if (parameterObject != null && !(parameterObject instanceof Map)) {
       MetaObject metaObject = configuration.newMetaObject(parameterObject);
       bindings = new ContextMap(metaObject);
-    } else {
+    } else {//
       bindings = new ContextMap(null);
-    }
+    }//_parameter
     bindings.put(PARAMETER_OBJECT_KEY, parameterObject);
     bindings.put(DATABASE_ID_KEY, configuration.getDatabaseId());
   }
@@ -64,7 +64,7 @@ public class DynamicContext {
     sqlBuilder.append(sql);
     sqlBuilder.append(" ");
   }
-
+  // 直接将builder里面的sql吐出来
   public String getSql() {
     return sqlBuilder.toString().trim();
   }
@@ -77,7 +77,7 @@ public class DynamicContext {
     private static final long serialVersionUID = 2977601501966151582L;
 
     private MetaObject parameterMetaObject;
-    public ContextMap(MetaObject parameterMetaObject) {
+    public ContextMap(MetaObject parameterMetaObject) {// parameterMetaObject
       this.parameterMetaObject = parameterMetaObject;
     }
 
