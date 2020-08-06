@@ -104,7 +104,7 @@ public class DefaultSqlSession implements SqlSession {
 
   public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
     try {
-      MappedStatement ms = configuration.getMappedStatement(statement);
+      MappedStatement ms = configuration.getMappedStatement(statement);// 获取statement
       List<E> result = executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
       return result;
     } catch (Exception e) {
@@ -238,7 +238,7 @@ public class DefaultSqlSession implements SqlSession {
     return (!autoCommit && dirty) || force;
   }
 
-  private Object wrapCollection(final Object object) {
+  private Object wrapCollection(final Object object) {// 如果是list 或者是array的话，封装到map中
     if (object instanceof List) {
       StrictMap<Object> map = new StrictMap<Object>();
       map.put("list", object);

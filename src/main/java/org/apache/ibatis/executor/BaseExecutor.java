@@ -268,15 +268,15 @@ public abstract class BaseExecutor implements Executor {
     } finally {
       localCache.removeObject(key);
     }
-    localCache.putObject(key, list);
-    if (ms.getStatementType() == StatementType.CALLABLE) {
+    localCache.putObject(key, list);// 进行缓存操作
+    if (ms.getStatementType() == StatementType.CALLABLE) {// callable
       localOutputParameterCache.putObject(key, parameter);
     }
     return list;
   }
-
+  //获取连接
   protected Connection getConnection(Log statementLog) throws SQLException {
-    Connection connection = transaction.getConnection();
+    Connection connection = transaction.getConnection();//获取连接
     if (statementLog.isDebugEnabled()) {
       return ConnectionLogger.newInstance(connection, statementLog, queryStack);
     } else {

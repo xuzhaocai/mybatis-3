@@ -66,7 +66,7 @@ public class MapperMethod {
         result = executeForMap(sqlSession, args);
       } else {
         Object param = method.convertArgsToSqlCommandParam(args);
-        result = sqlSession.selectOne(command.getName(), param);
+        result = sqlSession.selectOne(command.getName(), param);// 执行查询
       }
     } else if (SqlCommandType.FLUSH == command.getType()) {
         result = sqlSession.flushStatements();
@@ -238,10 +238,10 @@ public class MapperMethod {
     }
 
     public Object convertArgsToSqlCommandParam(Object[] args) {
-      final int paramCount = params.size();
+      final int paramCount = params.size();// 参数个数
       if (args == null || paramCount == 0) {
         return null;
-      } else if (!hasNamedParameters && paramCount == 1) {
+      } else if (!hasNamedParameters && paramCount == 1) {// 一个参数的时候
         return args[params.keySet().iterator().next()];
       } else {
         final Map<String, Object> param = new ParamMap<Object>();

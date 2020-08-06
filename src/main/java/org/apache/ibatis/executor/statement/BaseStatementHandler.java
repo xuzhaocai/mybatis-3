@@ -96,7 +96,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
   }
 
   protected abstract Statement instantiateStatement(Connection connection) throws SQLException;
-
+  // 设置超时时间
   protected void setStatementTimeout(Statement stmt) throws SQLException {
     Integer timeout = mappedStatement.getTimeout();
     Integer defaultTimeout = configuration.getDefaultStatementTimeout();

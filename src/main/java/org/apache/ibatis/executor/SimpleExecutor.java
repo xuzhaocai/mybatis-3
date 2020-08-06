@@ -54,7 +54,7 @@ public class SimpleExecutor extends BaseExecutor {
   public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
     Statement stmt = null;
     try {
-      Configuration configuration = ms.getConfiguration();
+      Configuration configuration = ms.getConfiguration();// 获取configuration
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
       stmt = prepareStatement(handler, ms.getStatementLog());
       return handler.<E>query(stmt, resultHandler);
@@ -69,8 +69,8 @@ public class SimpleExecutor extends BaseExecutor {
 
   private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
     Statement stmt;
-    Connection connection = getConnection(statementLog);
-    stmt = handler.prepare(connection);
+    Connection connection = getConnection(statementLog);// 获取连接
+    stmt = handler.prepare(connection);// 预处理statement
     handler.parameterize(stmt);
     return stmt;
   }
